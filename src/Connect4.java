@@ -6,13 +6,29 @@ public class Connect4
     private Token[][] grid;
     private boolean goAgain = true;
     private boolean player1Turn = true;
+    private boolean playerWon = false;
     public static final String YELLOW = "\033[0;33m";  // YELLOW
     public static final String RED = "\033[0;31m";     // RED
     public static final String WHITE = "\033[0;37m";   // WHITE
+    public static final String BLUE = "\033[0;34m";    // BLUE
+
 
     public Connect4()
     {
         grid = new Token[6][7];
+    }
+
+    public void play()
+    {
+        Player player1 = new Player("Red");
+        Player player2 = new Player("Yellow");
+        while(!playerWon)
+        {
+            printGrid();
+            turn(player1);
+            printGrid();
+            turn(player2);
+        }
     }
 
     public void printGrid()
@@ -21,13 +37,14 @@ public class Connect4
         for (int i = 0; i < grid.length; i++)
         {
             printRow(i);
-            System.out.println("------------------");
+            //System.out.println("---------------");
         }
     }
 
     public void turn(Player player)
     {
         int col;
+        System.out.print(WHITE);
         if (player1Turn)
         {
             System.out.println("It's Player 1's turn!");
@@ -37,8 +54,8 @@ public class Connect4
             System.out.println("It's Player 2's turn!");
         }
         goAgain = false;
-        System.out.println("Choose a column: ");
-        col = scan.nextInt();
+        System.out.print("Choose a column: ");
+        col = scan.nextInt() - 1;
         addToken(new Token(player.getColor()), col);
         if (!goAgain)
         {
@@ -57,7 +74,13 @@ public class Connect4
     {
         for (int i = 5; i > -1; i--)
         {
-            if (grid[i][col] == null)
+            if (col > 6 || col < 0)
+            {
+                System.out.println("Column doesn't exist. Choose again!");
+                goAgain = true;
+                break;
+            }
+            else if (grid[i][col] == null)
             {
                 grid[i][col] = token;
                 break;
@@ -74,9 +97,11 @@ public class Connect4
     {
         for (int col = 0; col < grid[0].length; col++)
         {
+            System.out.print(BLUE);
             System.out.print("|");
             printToken(grid[row][col]);
         }
+        System.out.print(BLUE);
         System.out.println("|");
     }
 
@@ -84,7 +109,8 @@ public class Connect4
     {
         if (token == null)
         {
-            System.out.print("0");
+            System.out.print(WHITE);
+            System.out.print(" ");
         }
         else
         {
@@ -97,7 +123,7 @@ public class Connect4
             {
                 System.out.print(YELLOW);
             }
-            System.out.print("0");
+            System.out.print("O");
             System.out.print(WHITE);
         }
     }
