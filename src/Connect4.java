@@ -7,6 +7,7 @@ public class Connect4
     private boolean goAgain = true;
     private boolean player1Turn = true;
     private boolean playerWon = false;
+    private int tokenPos;
     public static final String YELLOW = "\033[0;33m";  // YELLOW
     public static final String RED = "\033[0;31m";     // RED
     public static final String WHITE = "\033[0;37m";   // WHITE
@@ -24,10 +25,19 @@ public class Connect4
         Player player2 = new Player("Yellow");
         while(!playerWon)
         {
-            printGrid();
-            turn(player1);
-            printGrid();
-            turn(player2);
+
+            while (goAgain)
+            {
+                printGrid();
+                turn(player1);
+            }
+            goAgain = true;
+            while (goAgain)
+            {
+                printGrid();
+                turn(player2);
+            }
+
         }
     }
 
@@ -56,21 +66,19 @@ public class Connect4
         goAgain = false;
         System.out.print("Choose a column: ");
         col = scan.nextInt() - 1;
-        addToken(new Token(player.getColor()), col);
+        Token currToken = new Token(player.getColor());
+        currToken.setPos(addToken(currToken, col));
+        if (currToken.getPos() != 0)
+        {
+            player.addPlayerToken(currToken.getPos());
+        }
         if (!goAgain)
         {
-            if (player1Turn)
-            {
-                player1Turn = false;
-            }
-            else
-            {
-                player1Turn = true;
-            }
+            player1Turn = !player1Turn;
         }
     }
 
-    private void addToken(Token token, int col)
+    private int addToken(Token token, int col)
     {
         for (int i = 5; i > -1; i--)
         {
@@ -83,7 +91,7 @@ public class Connect4
             else if (grid[i][col] == null)
             {
                 grid[i][col] = token;
-                break;
+                return i * 7 + col + 1;
             }
             else if (i == 0)
             {
@@ -91,6 +99,7 @@ public class Connect4
                 goAgain = true;
             }
         }
+        return 0;
     }
 
     private void printRow(int row)
