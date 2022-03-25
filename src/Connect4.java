@@ -26,18 +26,19 @@ public class Connect4
         while(!playerWon)
         {
 
-            while (goAgain)
+            while (goAgain && !playerWon)
             {
                 printGrid();
                 turn(player1);
             }
             goAgain = true;
-            while (goAgain)
+            while (goAgain && !playerWon)
             {
                 printGrid();
                 turn(player2);
             }
-
+            goAgain = true;
+            
         }
     }
 
@@ -47,7 +48,7 @@ public class Connect4
         for (int i = 0; i < grid.length; i++)
         {
             printRow(i);
-            //System.out.println("---------------");
+
         }
     }
 
@@ -71,6 +72,18 @@ public class Connect4
         if (currToken.getPos() != 0)
         {
             player.addPlayerToken(currToken.getPos());
+        }
+        if (checkWin(player, currToken))
+        {
+            playerWon = true;
+            if (player1Turn)
+            {
+                System.out.println("PLAYER 1 WINS!");
+            }
+            else
+            {
+                System.out.println("PLAYER 2 WINS!");
+            }
         }
         if (!goAgain)
         {
@@ -135,6 +148,151 @@ public class Connect4
             System.out.print("O");
             System.out.print(WHITE);
         }
+    }
+
+    private boolean checkWin(Player player, Token token)
+    {
+        if (checkWinCond1(player, token) || checkWinCond2(player, token) || checkWinCond3(player, token) || checkWinCond4(player, token))
+        {
+            return  true;
+        }
+        return false;
+    }
+
+    private boolean checkWinCond1(Player player, Token token)
+    {
+        int count = 1;
+        if (player.getTokens().contains(token.getPos() - 6))
+        {
+            count++;
+            if (player.getTokens().contains(token.getPos() - 12))
+            {
+                count++;
+                if (player.getTokens().contains(token.getPos() - 18))
+                {
+                    count++;
+                }
+            }
+        }
+        if (player.getTokens().contains(token.getPos() + 6))
+        {
+            count++;
+            if (player.getTokens().contains(token.getPos() + 12))
+            {
+                count++;
+                if (player.getTokens().contains(token.getPos() + 18))
+                {
+                    count++;
+                }
+            }
+        }
+        if (count >= 4)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkWinCond2(Player player, Token token)
+    {
+        int count = 1;
+        if (player.getTokens().contains(token.getPos() - 8))
+        {
+            count++;
+            if (player.getTokens().contains(token.getPos() - 16))
+            {
+                count++;
+                if (player.getTokens().contains(token.getPos() - 24))
+                {
+                    count++;
+                }
+            }
+        }
+        if (player.getTokens().contains(token.getPos() + 8))
+        {
+            count++;
+            if (player.getTokens().contains(token.getPos() + 16))
+            {
+                count++;
+                if (player.getTokens().contains(token.getPos() + 24))
+                {
+                    count++;
+                }
+            }
+        }
+        if (count >= 4)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkWinCond3(Player player, Token token)
+    {
+        int count = 1;
+        if (player.getTokens().contains(token.getPos() - 7))
+        {
+            count++;
+            if (player.getTokens().contains(token.getPos() - 14))
+            {
+                count++;
+                if (player.getTokens().contains(token.getPos() - 21))
+                {
+                    count++;
+                }
+            }
+        }
+        if (player.getTokens().contains(token.getPos() + 7))
+        {
+            count++;
+            if (player.getTokens().contains(token.getPos() + 14))
+            {
+                count++;
+                if (player.getTokens().contains(token.getPos() + 21))
+                {
+                    count++;
+                }
+            }
+        }
+        if (count >= 4)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkWinCond4(Player player, Token token)
+    {
+        int count = 1;
+        if (player.getTokens().contains(token.getPos() - 1))
+        {
+            count++;
+            if (player.getTokens().contains(token.getPos() - 2))
+            {
+                count++;
+                if (player.getTokens().contains(token.getPos() - 3))
+                {
+                    count++;
+                }
+            }
+        }
+        if (player.getTokens().contains(token.getPos() + 1))
+        {
+            count++;
+            if (player.getTokens().contains(token.getPos() + 2))
+            {
+                count++;
+                if (player.getTokens().contains(token.getPos() + 3))
+                {
+                    count++;
+                }
+            }
+        }
+        if (count >= 4)
+        {
+            return true;
+        }
+        return false;
     }
 
 }
